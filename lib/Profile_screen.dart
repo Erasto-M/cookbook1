@@ -10,7 +10,7 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor: Colors.green,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(30.0),
           child: SingleChildScrollView(
             child: Center(
               child: Stack(
