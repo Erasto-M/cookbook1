@@ -1,9 +1,11 @@
+import 'package:cookbook1/sign_inpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Loginpage1.dart';
 class SignUp extends StatefulWidget {
-  String message;
-  bool issignup = true;
-   SignUp({Key? key, required this.message}) : super(key: key);
+  //String message = '';
+ // bool issignup = true;
+  const  SignUp({Key? key}) : super(key: key);
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -16,6 +18,7 @@ class _SignUpState extends State<SignUp> {
   final passwordcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    User? user  =FirebaseAuth.instance.currentUser;
     return  Scaffold(
       body: SafeArea(
         child: Padding(
@@ -63,6 +66,12 @@ class _SignUpState extends State<SignUp> {
                     button("SignUp"),
                   ],
                 ),
+                FloatingActionButton(
+                  child: Text("Click"),
+                    onPressed: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Signin()));
+                    }
+                ),
               ],
             ),
           ),
@@ -93,10 +102,14 @@ class _SignUpState extends State<SignUp> {
   }
   Widget button(String text) {
     return ElevatedButton(
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
       child: Text(text),
-    );
+      onPressed: () async{
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: emailcontroller.text,
+            password: passwordcontroller.text);
+        setState(() {
+
+        });
+        });
   }
 }

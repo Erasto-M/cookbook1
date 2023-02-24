@@ -1,11 +1,12 @@
 import 'package:cookbook1/Signup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
-   String message;
-   bool islogin = true;
- LoginPage({Key? key, required this.message}) : super(key: key);
+   //String message;
+   //bool islogin = true;
+ LoginPage({Key? key}) : super(key: key);
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -14,7 +15,8 @@ class _LoginPageState extends State<LoginPage> {
   final usercontroller = TextEditingController();
   final passwordcontroller = TextEditingController();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contexwidget) {
+    User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
         body: SafeArea(
           child: Padding(
@@ -69,6 +71,11 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ],
       ),
+                  ElevatedButton(
+                      onPressed: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SignUp()));
+                      },
+                      child:const  Text("click")),
                 ],
               ),
             ),
@@ -101,12 +108,14 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget button(String text) {
     return ElevatedButton(
-      onPressed: () {
-        Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context)=>SignUp(message: 'welcome',)));
-      },
       child: Text(text),
-    );
+      onPressed: () async{
+       await FirebaseAuth.instance.signInWithEmailAndPassword(
+           email: usercontroller.text,
+           password: passwordcontroller.text);
+       setState(() {
+
+       });
+      });
   }
 }
