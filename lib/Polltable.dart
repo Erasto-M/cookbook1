@@ -84,7 +84,7 @@ import 'package:firebase_core/firebase_core.dart';
                  String age = agecontroller.text;
                  String email = emailcontroller.text;
                  String password = passwordcontroller.text;
-                 await firestore.collection('student').doc().set({
+                 await firestore.collection('teachers').doc().set({
                    'name': name,
                    'age': age,
                    'email': email,
