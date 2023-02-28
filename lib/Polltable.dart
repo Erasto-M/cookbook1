@@ -1,3 +1,4 @@
+import 'package:cookbook1/listview.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,6 +17,7 @@ import 'package:firebase_core/firebase_core.dart';
    final agecontroller = TextEditingController();
    final emailcontroller = TextEditingController();
    final passwordcontroller = TextEditingController();
+  CollectionReference Poll = FirebaseFirestore.instance.collection('Poll');
 
   //get firestore => firestore;
 
@@ -44,7 +46,7 @@ import 'package:firebase_core/firebase_core.dart';
          padding: const EdgeInsets.all(30.0),
          child: SingleChildScrollView(
            child: Column(
-             crossAxisAlignment: CrossAxisAlignment.end,
+             crossAxisAlignment: CrossAxisAlignment.start,
              children: [
                TextField(
                  controller: namecontroller,
@@ -91,6 +93,37 @@ import 'package:firebase_core/firebase_core.dart';
                    'password': password,
                  });
                }, child: const Text("submit")),
+               ElevatedButton(onPressed: (){
+                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ListViewExample()));
+               },
+                   child: const Text("List")),
+               StreamBuilder<QuerySnapshot>(
+                   stream:Poll.snapshots(),
+
+                   builder:(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+                     if(snapshot.hasError){
+                       return Text('Error: ${snapshot.error}');
+                     }
+                     if(snapshot.connectionState==ConnectionState.waiting){
+                       return CircularProgressIndicator(color: Colors.red,);
+                     }
+                     return ListView(
+                       children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                         Map<String,dynamic> data = document.data() as Map<String,dynamic>;
+                         return Container(
+                           child: Row(
+                             children: [
+                               Text('Name: ${data['name']}'),
+                               Text('Age: ${data['age']}'),
+                               Text('Email: ${data['email']}'),
+                               Text('Password: ${data['password']}'),
+                             ],
+                           ),
+                         );
+                       }).toList(),
+                     );
+                   } ),
+
              ],
            ),
          ),
