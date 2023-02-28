@@ -1,6 +1,7 @@
 import 'package:cookbook1/sign_inpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'Loginpage1.dart';
 class SignUp extends StatefulWidget {
   //String message = '';
@@ -64,13 +65,17 @@ class _SignUpState extends State<SignUp> {
                         controller: passwordcontroller),
                     space(),
                     button("SignUp"),
+                    Row(
+                      children:  [
+                       const  Text("Already have an account "),
+                        ElevatedButton(onPressed: (){
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>LoginPage()));
+                        }, child:const  Text('Sign-In',
+                        style: TextStyle(color: Colors.brown),
+                        )),
+                      ],
+                    ),
                   ],
-                ),
-                FloatingActionButton(
-                  child: Text("Click"),
-                    onPressed: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Signin()));
-                    }
                 ),
               ],
             ),
@@ -107,9 +112,6 @@ class _SignUpState extends State<SignUp> {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: emailcontroller.text,
             password: passwordcontroller.text);
-        setState(() {
-
-        });
         });
   }
 }

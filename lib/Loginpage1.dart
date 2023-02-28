@@ -1,7 +1,9 @@
 import 'package:cookbook1/Signup.dart';
+import 'package:cookbook1/sign_inpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class LoginPage extends StatefulWidget {
    //String message;
@@ -53,29 +55,23 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   space(),
                   button("Login"),
-                    RichText(
-                    text:  TextSpan(
-                      text: "Don't have an account ",
-                          style: const TextStyle(fontSize: 20,color: Colors.black),
-                          children: [
-                            TextSpan(
-                              text: "SignUp",
-                              style: GoogleFonts.roboto(
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline,
-                                color: Colors.black87,
-                              ),
-                            )
-                          ]
+                    Row(
+                      children: [
+                        RichText(
+                        text: const TextSpan(
+                          text: "Don't have an account ",
+                              style: const TextStyle(fontSize: 20,color: Colors.black),
+
+                        )),
+                        ElevatedButton(onPressed: (){
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>SignUp()));
+                        },child: const Text('Signup',
+                        style: TextStyle(color: Colors.brown),
+                        )),
+                      ],
                     ),
-          ),
         ],
       ),
-                  ElevatedButton(
-                      onPressed: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SignUp()));
-                      },
-                      child:const  Text("click")),
                 ],
               ),
             ),
@@ -112,10 +108,10 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () async{
        await FirebaseAuth.instance.signInWithEmailAndPassword(
            email: usercontroller.text,
-           password: passwordcontroller.text);
-       setState(() {
-
+           password: passwordcontroller.text).then((value) {
+             Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Signin()));
        });
+
       });
   }
 }
