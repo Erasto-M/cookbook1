@@ -111,7 +111,9 @@ class _SignUpState extends State<SignUp> {
       onPressed: () async{
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: emailcontroller.text,
-            password: passwordcontroller.text);
+            password: passwordcontroller.text).then((value) {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Signin()));
+        });
         });
   }
 }
