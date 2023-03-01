@@ -48,6 +48,9 @@ import 'package:firebase_core/firebase_core.dart';
            child: Column(
              crossAxisAlignment: CrossAxisAlignment.start,
              children: [
+              const  Center(
+                 child: Text("Students"),
+               ),
                TextField(
                  controller: namecontroller,
                  keyboardType: TextInputType.text,
@@ -86,44 +89,18 @@ import 'package:firebase_core/firebase_core.dart';
                  String age = agecontroller.text;
                  String email = emailcontroller.text;
                  String password = passwordcontroller.text;
-                 await firestore.collection('teachers').doc().set({
+                 await firestore.collection('students').doc().set({
                    'name': name,
                    'age': age,
                    'email': email,
                    'password': password,
                  });
                }, child: const Text("submit")),
+              const  SizedBox(height: 16,),
                ElevatedButton(onPressed: (){
-                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ListViewExample()));
+                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ListView()));
                },
                    child: const Text("List")),
-               StreamBuilder<QuerySnapshot>(
-                   stream:Poll.snapshots(),
-
-                   builder:(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-                     if(snapshot.hasError){
-                       return Text('Error: ${snapshot.error}');
-                     }
-                     if(snapshot.connectionState==ConnectionState.waiting){
-                       return CircularProgressIndicator(color: Colors.red,);
-                     }
-                     return ListView(
-                       children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                         Map<String,dynamic> data = document.data() as Map<String,dynamic>;
-                         return Container(
-                           child: Row(
-                             children: [
-                               Text('Name: ${data['name']}'),
-                               Text('Age: ${data['age']}'),
-                               Text('Email: ${data['email']}'),
-                               Text('Password: ${data['password']}'),
-                             ],
-                           ),
-                         );
-                       }).toList(),
-                     );
-                   } ),
-
              ],
            ),
          ),
