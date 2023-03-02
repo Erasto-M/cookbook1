@@ -98,7 +98,7 @@ import 'package:firebase_core/firebase_core.dart';
                }, child: const Text("submit")),
               const  SizedBox(height: 16,),
                ElevatedButton(onPressed: (){
-                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ListView()));
+                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ListStudent()));
                },
                    child: const Text("List")),
              ],
@@ -107,4 +107,6 @@ import 'package:firebase_core/firebase_core.dart';
        ),
      );
    }
+   
+     ListViews() {}
  }
