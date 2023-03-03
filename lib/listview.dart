@@ -60,12 +60,19 @@ class _ListStudentState extends State<ListStudent> {
                     onPressed: () async {
                       final String name = namecontroller.text;
                       final String age = agecontroller.text.toString();
-                      if (age != null) {
+                      if (age != null||name != null) {
                         await students
                             .doc(documentSnapshot!.id)
                             .update({"name": name, "age": age});
                         namecontroller.text = '';
                         agecontroller.text = '';
+                        ScaffoldMessenger.of(context).showSnackBar(
+                         const  SnackBar(content: Text("updated member details",
+                         style: TextStyle(color: Colors.red),
+                         ),
+                         duration: Duration(seconds: 2),
+                         ),
+                        );
                       }
                     },
                     child: const Text("Update")),
@@ -123,9 +130,15 @@ class _ListStudentState extends State<ListStudent> {
                         await students.add({"name": name, "age": age});
                         namecontroller.text = '';
                         agecontroller.text = '';
+                        ScaffoldMessenger.of(context).showSnackBar(
+                           const SnackBar(content: Text("Successfully added a member",
+                          style: TextStyle(color: Colors.red),
+                          ),
+                          duration:Duration(seconds: 2) ,)
+                        );
                       }
                     },
-                    child: const Text("Update")),
+                    child: const Text("Add")),
               ],
             ),
           );
@@ -136,7 +149,9 @@ class _ListStudentState extends State<ListStudent> {
     await students.doc(studentId).delete();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Succesfully deleted a memebr'),
+        content: Text('Succesfully deleted a memebr',
+        style: TextStyle(color: Colors.red),
+        ),
       ),
     );
   }

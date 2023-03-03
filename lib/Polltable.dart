@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'package:cookbook1/listview.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:image_picker/image_picker.dart';
  class Poll extends StatefulWidget {
 
    const Poll({Key? key}) : super(key: key);
@@ -12,28 +15,39 @@ import 'package:firebase_core/firebase_core.dart';
 
  class _PollState extends State<Poll> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  //  FirebaseFirestore firestore = FirebaseFirestore
+  FirebaseStorage storage = FirebaseStorage.instance;
    final namecontroller = TextEditingController();
    final agecontroller = TextEditingController();
    final emailcontroller = TextEditingController();
    final passwordcontroller = TextEditingController();
-  CollectionReference Poll = FirebaseFirestore.instance.collection('Poll');
+   final picker = ImagePicker();
+  CollectionReference students = FirebaseFirestore.instance.collection('students');
+  File? _image;
 
-  //get firestore => firestore;
+  //get downloadurl => downloadurl;
+  Future<String?> uploadImage() async {
+    if (_image == null) return null;
+    var snapshot = await storage
+        .ref()
+        .child('images/${DateTime.now().toString()}')
+        .putFile(_image!);
+    return await snapshot.ref.getDownloadURL();
+  }
+  Future<void> submitForm() async {
+    String name = namecontroller.text;
+    String age = agecontroller.text;
+    String email = emailcontroller.text;
+    String password = passwordcontroller.text;
+    String? downloadUrl = await uploadImage();
 
-   //pick user input from the textfileds
-   // void submitform()async {
-   //   String name = namecontroller.text;
-   //   String age = agecontroller.text;
-   //   String email = emailcontroller.text;
-   //   String password = passwordcontroller.text;
-   //   await firestore.collection('student').add({
-   //     'name': name,
-   //     'age': age,
-   //     'email': email,
-   //     'password': password,
-   //   });
-   // }
+    await firestore.collection('students').doc().set({
+      'name': name,
+      'age': age,
+      'email': email,
+      'password': password,
+      'image': downloadUrl,
+    });
+  }
    @override
    Widget build(BuildContext context) {
      return Scaffold(
@@ -50,6 +64,30 @@ import 'package:firebase_core/firebase_core.dart';
              children: [
               const  Center(
                  child: Text("Students"),
+               ),
+               _image != null
+                   ? Image.file(
+                 _image!,
+                 height: 100,
+               )
+                   : const SizedBox(height: 100),
+               Center(
+                 child: IconButton(onPressed: ()async{
+                   final pickedfile = await  picker.pickImage(
+                       source: ImageSource.camera,
+                   maxWidth: 500,
+                     maxHeight: 50,
+                   );
+                   setState(() {
+                     if(pickedfile != null){
+                       _image = File(pickedfile.path);
+                     }
+                     else{
+                       print("no file selected");
+                     }
+                   });
+                 },
+                     icon: const Icon(Icons.camera_alt),),
                ),
                TextField(
                  controller: namecontroller,
@@ -74,7 +112,7 @@ import 'package:firebase_core/firebase_core.dart';
                      hintText: "email"
                  ),
                ),
-               SizedBox(height:10 ,),
+               const SizedBox(height:10 ,),
                TextField(
                  controller: passwordcontroller,
                  keyboardType: TextInputType.text,
@@ -85,17 +123,12 @@ import 'package:firebase_core/firebase_core.dart';
                ),
               const SizedBox(height: 10,),
                ElevatedButton(onPressed: ()async{
-                 String name = namecontroller.text;
-                 String age = agecontroller.text;
-                 String email = emailcontroller.text;
-                 String password = passwordcontroller.text;
-                 await firestore.collection('students').doc().set({
-                   'name': name,
-                   'age': age,
-                   'email': email,
-                   'password': password,
-                 });
-               }, child: const Text("submit")),
+                 await submitForm();
+                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ListView()));
+                 },
+                 child: const Text("submit")),
+
+
               const  SizedBox(height: 16,),
                ElevatedButton(onPressed: (){
                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ListStudent()));
@@ -107,6 +140,6 @@ import 'package:firebase_core/firebase_core.dart';
        ),
      );
    }
-   
+
      ListViews() {}
  }
