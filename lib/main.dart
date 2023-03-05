@@ -4,7 +4,9 @@ import 'package:cookbook1/sign_inpage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'Homepage.dart';
 import 'firebase_options.dart';
+
 import 'Loginpage1.dart';
 import 'package:cookbook1/Polltable.dart';
 import 'sign_inpage.dart';
@@ -26,10 +28,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
-      home:LoginPage() ,
+      home: LoginPage(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
+        primarySwatch: Colors.orange,
       ),
     );
   }

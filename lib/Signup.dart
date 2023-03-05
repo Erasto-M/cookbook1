@@ -1,3 +1,4 @@
+import 'package:cookbook1/Homepage.dart';
 import 'package:cookbook1/sign_inpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -112,7 +113,7 @@ class _SignUpState extends State<SignUp> {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: emailcontroller.text,
             password: passwordcontroller.text).then((value) {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Signin()));
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>const Bottomnav()));
         });
         });
   }
