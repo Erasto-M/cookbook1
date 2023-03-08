@@ -103,7 +103,7 @@ class _FetchcarState extends State<Fetchcar> {
                         Row(
                           children:  [
                             const  Text("Seats:",
-                              style: TextStyle(color: Colors.black,fontSize: 20,),
+                               style: TextStyle(color: Colors.black,fontSize: 20,),
                             ),
                             const SizedBox(width: 15,),
                             Text(document['Seats']),

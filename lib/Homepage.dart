@@ -2,6 +2,7 @@ import 'package:cookbook1/car.dart';
 import 'package:cookbook1/fetchcars.dart';
 import 'package:cookbook1/fetchmembers.dart';
 import 'package:cookbook1/registermember.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Home.dart';
  class Bottomnav extends StatefulWidget {
@@ -12,6 +13,7 @@ import 'Home.dart';
  }
 
  class _BottomnavState extends State<Bottomnav> {
+   FirebaseAuth  firebaseAuth = FirebaseAuth.instance;
    int selectedindex = 0;
    static  List<Widget> widgetoptions = <Widget>[
      const Home(),
@@ -22,6 +24,9 @@ import 'Home.dart';
      setState(() {
        selectedindex = index;
      });
+   }
+   Future<User> getuserId()async{
+     return await firebaseAuth.currentUser!;
    }
    @override
    Widget build(BuildContext context) {
